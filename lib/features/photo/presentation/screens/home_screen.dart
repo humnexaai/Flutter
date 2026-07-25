@@ -13,7 +13,8 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(photoWorkflowControllerProvider);
+    final isProcessing = ref.watch(photoWorkflowControllerProvider.select((s) => s.isProcessing));
+    final errorMessage = ref.watch(photoWorkflowControllerProvider.select((s) => s.errorMessage));
     final controller = ref.read(photoWorkflowControllerProvider.notifier);
 
     return Scaffold(
@@ -37,7 +38,7 @@ class HomeScreen extends ConsumerWidget {
                         title: 'Instant Camera',
                         subtitle: 'Capture with circular face guide',
                         icon: Icons.camera_alt_rounded,
-                        onTap: state.isProcessing
+                        onTap: isProcessing
                             ? null
                             : () => Navigator.pushNamed(
                                   context,
@@ -51,7 +52,7 @@ class HomeScreen extends ConsumerWidget {
                         title: 'Gallery Upload',
                         subtitle: 'Pick an existing photo',
                         icon: Icons.photo_library_rounded,
-                        onTap: state.isProcessing
+                        onTap: isProcessing
                             ? null
                             : () async {
                                 await controller.pickFromGallery();
@@ -66,11 +67,11 @@ class HomeScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              if (state.isProcessing) const LinearProgressIndicator(),
+              if (isProcessing) const LinearProgressIndicator(),
               const SizedBox(height: 8),
-              if (state.errorMessage != null)
+              if (errorMessage != null)
                 Text(
-                  state.errorMessage!,
+                  errorMessage,
                   style: const TextStyle(
                     color: Colors.redAccent,
                     fontWeight: FontWeight.w500,
@@ -109,7 +110,7 @@ class _ActionCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 34,
-                backgroundColor: AppColors.secondary.withOpacity(0.16),
+                backgroundColor: AppColors.secondary.withValues(alpha: 0.16),
                 child: Icon(icon, size: 34),
               ),
               const SizedBox(width: 18),
@@ -129,7 +130,7 @@ class _ActionCard extends StatelessWidget {
                     Text(
                       subtitle,
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.78),
+                        color: Colors.white.withValues(alpha: 0.78),
                         fontSize: 14,
                       ),
                     ),

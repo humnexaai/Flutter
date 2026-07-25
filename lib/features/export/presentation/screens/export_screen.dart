@@ -68,7 +68,7 @@ class _ExportScreenState extends ConsumerState<ExportScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: AppColors.secondary.withOpacity(0.55),
+                            color: AppColors.secondary.withValues(alpha: 0.55),
                           ),
                           color: AppColors.card,
                         ),

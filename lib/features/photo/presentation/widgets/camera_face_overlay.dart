@@ -60,11 +60,11 @@ class _OverlayPainter extends CustomPainter {
 
     canvas.drawPath(
       overlayPath,
-      Paint()..color = Colors.black.withOpacity(0.58),
+      Paint()..color = Colors.black.withValues(alpha: 0.58),
     );
 
     final guidePaint = Paint()
-      ..color = AppColors.secondary.withOpacity(0.4)
+      ..color = AppColors.secondary.withValues(alpha: 0.4)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
     canvas.drawOval(holeRect, guidePaint);
