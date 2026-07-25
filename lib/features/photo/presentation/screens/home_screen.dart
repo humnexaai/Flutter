@@ -109,7 +109,7 @@ class _ActionCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 34,
-                backgroundColor: AppColors.secondary.withOpacity(0.16),
+                backgroundColor: AppColors.secondary.withValues(alpha: 0.16),
                 child: Icon(icon, size: 34),
               ),
               const SizedBox(width: 18),
@@ -129,7 +129,7 @@ class _ActionCard extends StatelessWidget {
                     Text(
                       subtitle,
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.78),
+                        color: Colors.white.withValues(alpha: 0.78),
                         fontSize: 14,
                       ),
                     ),
