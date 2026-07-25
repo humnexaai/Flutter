@@ -13,14 +13,18 @@ class PreviewScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(photoWorkflowControllerProvider);
+    final originalImagePath = ref.watch(photoWorkflowControllerProvider.select((s) => s.originalImagePath));
+    final processedPhoto = ref.watch(photoWorkflowControllerProvider.select((s) => s.processedPhoto));
+    final backgroundRemoved = ref.watch(photoWorkflowControllerProvider.select((s) => s.backgroundRemoved));
+    final isProcessing = ref.watch(photoWorkflowControllerProvider.select((s) => s.isProcessing));
+    final errorMessage = ref.watch(photoWorkflowControllerProvider.select((s) => s.errorMessage));
     final controller = ref.read(photoWorkflowControllerProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Preview'),
       ),
-      body: state.originalImagePath == null
+      body: originalImagePath == null
           ? const Center(
               child: Text('No image selected'),
             )
@@ -32,40 +36,40 @@ class PreviewScreen extends ConsumerWidget {
                   Expanded(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: state.processedPhoto != null
+                      child: processedPhoto != null
                           ? Image.file(
-                              File(state.processedPhoto!.processedPath),
+                              File(processedPhoto.processedPath),
                               fit: BoxFit.cover,
                             )
                           : Image.file(
-                              File(state.originalImagePath!),
+                              File(originalImagePath),
                               fit: BoxFit.cover,
                             ),
                     ),
                   ),
                   const SizedBox(height: 16),
                   SwitchListTile.adaptive(
-                    value: state.backgroundRemoved,
+                    value: backgroundRemoved,
                     onChanged: controller.reprocessWithBackgroundOption,
                     title: const Text('Background Removal (White)'),
                     subtitle: const Text('AI offline processing'),
                   ),
-                  if (state.isProcessing)
+                  if (isProcessing)
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 12),
                       child: LinearProgressIndicator(),
                     ),
-                  if (state.errorMessage != null)
+                  if (errorMessage != null)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Text(
-                        state.errorMessage!,
+                        errorMessage,
                         style: const TextStyle(color: Colors.redAccent),
                       ),
                     ),
                   const SizedBox(height: 8),
                   FilledButton(
-                    onPressed: state.isProcessing
+                    onPressed: isProcessing
                         ? null
                         : () {
                             Navigator.pushNamed(context, ExportScreen.routeName);

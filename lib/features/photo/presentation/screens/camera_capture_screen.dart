@@ -71,7 +71,8 @@ class _CameraCaptureScreenState extends ConsumerState<CameraCaptureScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(photoWorkflowControllerProvider);
+    final isProcessing = ref.watch(photoWorkflowControllerProvider.select((s) => s.isProcessing));
+    final errorMessage = ref.watch(photoWorkflowControllerProvider.select((s) => s.errorMessage));
 
     return Scaffold(
       appBar: AppBar(title: const Text('Instant Camera')),
@@ -95,11 +96,11 @@ class _CameraCaptureScreenState extends ConsumerState<CameraCaptureScreen> {
                         ],
                       ),
                     ),
-                    if (state.errorMessage != null)
+                    if (errorMessage != null)
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                         child: Text(
-                          state.errorMessage!,
+                          errorMessage,
                           style: const TextStyle(color: Colors.redAccent),
                         ),
                       ),
@@ -109,7 +110,7 @@ class _CameraCaptureScreenState extends ConsumerState<CameraCaptureScreen> {
                         children: [
                           Expanded(
                             child: FilledButton.icon(
-                              onPressed: _capturing || state.isProcessing ? null : _captureAndProcess,
+                              onPressed: _capturing || isProcessing ? null : _captureAndProcess,
                               icon: _capturing
                                   ? const SizedBox(
                                       width: 16,
